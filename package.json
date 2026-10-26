@@ -1,0 +1,14 @@
+{
+  "name": "tubekit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Free tools that help YouTube creators get more real viewers: channel insights, thumbnail tester, Shorts maker, captions & chapters, unanswered comments. No bots.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/tubekit.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

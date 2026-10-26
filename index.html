@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TubeKit</title>
+  <meta name="description" content="ชุดเครื่องมือฟรีช่วยครีเอเตอร์ YouTube: วิเคราะห์ช่อง ทดสอบภาพปก ตัด Shorts ซับและ chapters คอมเมนต์ที่ยังไม่ตอบ ไม่ใช้บอท ไม่ปั่นวิว">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="icon.svg" alt="" width="36" height="36">
+      <div>
+        <h1>TubeKit</h1>
+        <p class="tagline" data-i18n="tagline"></p>
+      </div>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="th">ไทย</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </header>
+  <p class="privacy"><span aria-hidden="true">🔒</span> <span data-i18n="privacy"></span></p>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="analytics" data-i18n="tAnalytics"></button>
+    <button role="tab" data-tab="thumb" data-i18n="tThumb"></button>
+    <button role="tab" data-tab="shorts" data-i18n="tShorts"></button>
+    <button role="tab" data-tab="subs" data-i18n="tSubs"></button>
+    <button role="tab" data-tab="comments" data-i18n="tComments"></button>
+  </nav>
+
+  <main>
+    <!-- Analytics -->
+    <section id="tab-analytics" class="panel">
+      <h2 data-i18n="anTitle"></h2>
+      <p class="note" data-i18n="anHow"></p>
+      <label class="drop" id="an-drop"><input type="file" id="an-file" accept=".csv,text/csv"><span data-i18n="anDrop"></span></label>
+      <p class="center"><button type="button" class="link" id="an-demo" data-i18n="anDemo"></button></p>
+      <div id="an-out"></div>
+    </section>
+
+    <!-- Thumbnail + title -->
+    <section id="tab-thumb" class="panel" hidden>
+      <h2 data-i18n="thTitle"></h2>
+      <div class="card">
+        <div class="row wrap">
+          <label class="button"><span data-i18n="thAdd"></span><input type="file" id="th-file" accept="image/*" multiple hidden></label>
+          <label class="button secondary"><span data-i18n="thAddCompetitor"></span><input type="file" id="th-comp" accept="image/*" multiple hidden></label>
+        </div>
+        <div class="grid3">
+          <label><span data-i18n="thVideoTitle"></span><input id="th-title" maxlength="140"></label>
+          <label><span data-i18n="thChannel"></span><input id="th-channel" maxlength="60"></label>
+          <label><span data-i18n="thViews"></span><input id="th-views" value="12K"></label>
+        </div>
+        <div class="row wrap">
+          <span data-i18n="thMode"></span>
+          <label class="check"><input type="radio" name="th-theme" value="light" checked> <span data-i18n="thLight"></span></label>
+          <label class="check"><input type="radio" name="th-theme" value="dark"> <span data-i18n="thDark"></span></label>
+        </div>
+      </div>
+      <p class="muted small" data-i18n="thTip"></p>
+      <div id="th-out"></div>
+    </section>
+
+    <!-- Shorts -->
+    <section id="tab-shorts" class="panel" hidden>
+      <h2 data-i18n="shTitle"></h2>
+      <label class="drop" id="sh-drop"><input type="file" id="sh-file" accept="video/*"><span data-i18n="shDrop"></span></label>
+      <div id="sh-work" hidden>
+        <div class="shorts-layout">
+          <div class="shorts-preview">
+            <canvas id="sh-canvas" width="720" height="1280"></canvas>
+            <video id="sh-video" playsinline hidden></video>
+          </div>
+          <div class="card">
+            <button type="button" class="secondary" id="sh-analyze" data-i18n="shAnalyze"></button>
+            <p class="msg" id="sh-analyze-msg" role="status"></p>
+            <div id="sh-suggest"></div>
+            <div class="grid2 tight">
+              <label><span data-i18n="shStart"></span><input type="number" id="sh-start" min="0" step="0.5" value="0"></label>
+              <label><span data-i18n="shLength"></span><input type="number" id="sh-len" min="5" max="180" step="1" value="45"></label>
+            </div>
+            <label><span data-i18n="shCenter"></span><input type="range" id="sh-center" min="0" max="1" step="0.01" value="0.5"></label>
+            <label><span data-i18n="shFit"></span>
+              <select id="sh-fit"><option value="crop" data-i18n="shFitCrop"></option><option value="blur" data-i18n="shFitBlur"></option></select>
+            </label>
+            <label><span data-i18n="shTitleText"></span><input id="sh-headline" maxlength="60"></label>
+            <label><span data-i18n="shSubs"></span><input type="file" id="sh-subs" accept=".srt,.vtt,.sbv,text/vtt"></label>
+            <p class="muted small"><span data-i18n="shSubsFromTab"></span> <button type="button" class="link" id="sh-subs-tab">↺</button> <span id="sh-subs-msg"></span></p>
+            <div class="row wrap">
+              <button type="button" class="secondary" id="sh-preview" data-i18n="shPreview"></button>
+              <button type="button" id="sh-record" data-i18n="shRecord"></button>
+            </div>
+            <p class="muted small" data-i18n="shRealtime"></p>
+            <p class="msg" id="sh-msg" role="status"></p>
+            <p id="sh-result" hidden><a id="sh-download" class="button" data-i18n="download"></a> <span class="muted small" data-i18n="shFormatNote"></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subtitles -->
+    <section id="tab-subs" class="panel" hidden>
+      <h2 data-i18n="suTitle"></h2>
+      <p class="note" data-i18n="suHow"></p>
+      <label class="drop" id="su-drop"><input type="file" id="su-file" accept=".srt,.vtt,.sbv,text/vtt,text/plain"><span data-i18n="suDrop"></span></label>
+      <div id="su-work" hidden>
+        <p class="strong" id="su-info"></p>
+        <div class="row wrap">
+          <button type="button" class="secondary" id="su-merge" data-i18n="suMerge"></button>
+          <button type="button" class="secondary" id="su-srt" data-i18n="suExportSrt"></button>
+          <button type="button" class="secondary" id="su-vtt" data-i18n="suExportVtt"></button>
+        </div>
+        <details class="card"><summary data-i18n="suEdit"></summary><div id="su-cues" class="cue-list"></div></details>
+        <div class="card">
+          <h3 data-i18n="suChapters"></h3>
+          <p class="muted small" data-i18n="suChaptersHelp"></p>
+          <div class="row wrap">
+            <button type="button" class="secondary" id="su-suggest" data-i18n="suSuggest"></button>
+            <button type="button" class="secondary" id="su-add" data-i18n="suAddChapter"></button>
+          </div>
+          <div id="su-chapters"></div>
+          <p class="msg" id="su-ch-msg" role="status"></p>
+          <textarea id="su-ch-text" rows="6" readonly></textarea>
+          <button type="button" class="secondary" id="su-ch-copy" data-i18n="copy"></button>
+        </div>
+        <div class="card">
+          <h3 data-i18n="suTranscript"></h3>
+          <textarea id="su-transcript" rows="10" readonly></textarea>
+          <button type="button" class="secondary" id="su-tr-copy" data-i18n="copy"></button>
+        </div>
+      </div>
+      <p class="muted small" data-i18n="suNote"></p>
+    </section>
+
+    <!-- Comments -->
+    <section id="tab-comments" class="panel" hidden>
+      <h2 data-i18n="coTitle"></h2>
+      <div class="card">
+        <label><span data-i18n="coKey"></span><input type="password" id="co-key" autocomplete="off" spellcheck="false"></label>
+        <p class="muted small" data-i18n="coKeyHelp"></p>
+        <label class="check"><input type="checkbox" id="co-remember"> <span data-i18n="coRemember"></span></label>
+        <label><span data-i18n="coVideos"></span><textarea id="co-videos" rows="3" placeholder="https://www.youtube.com/watch?v=..."></textarea></label>
+        <button type="button" id="co-fetch" data-i18n="coFetch"></button>
+        <p class="msg" id="co-msg" role="status"></p>
+      </div>
+      <details class="card"><summary data-i18n="coTemplates"></summary><textarea id="co-templates" rows="4"></textarea></details>
+      <div id="co-out"></div>
+      <p class="muted small" data-i18n="coNote"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p data-i18n="footer"></p>
+    <p><a href="https://github.com/ronsuthlor3-lab/tubekit">GitHub</a> · <a href="https://github.com/ronsuthlor3-lab">More free tools</a></p>
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
